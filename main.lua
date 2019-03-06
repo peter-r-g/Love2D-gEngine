@@ -15,3 +15,19 @@ end
 function love.quit()
     gEngine:Quit()
 end
+
+function love.keypressed(key, scanCode, isRepeat)
+    gEngine:KeyPressed(key, scanCode, isRepeat)
+end
+
+function love.keyreleased(key, scanCode)
+    gEngine:KeyReleased(key, scanCode)
+end
+
+function love.mousepressed(x, y, button, isTouch, presses)
+    gEngine:MousePressed(x, y, button, isTouch, presses)
+end
+
+function love.mousereleased(x, y, button, isTouch, presses)
+    gEngine:MouseReleased(x, y, button, isTouch, presses)
+end
