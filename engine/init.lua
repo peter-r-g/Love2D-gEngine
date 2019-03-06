@@ -6,34 +6,6 @@ _G.Class = require.relative(this, "utility.middleClass")
 
 local ENGINE_CLASS = Class("gEngine")
 
-function ENGINE_CLASS:EnableModule(moduleName)
-    self.enabledModules[moduleName] = true
-    self:OnModuleEnabled(moduleName)
-end
-
-function ENGINE_CLASS:DisableModule(moduleName)
-    self.enabledModules[moduleName] = false
-    self:OnModuleDisabled(moduleName)
-end
-
-function ENGINE_CLASS:IsModuleEnabled(moduleName)
-    return self.enabledModules[moduleName] or false
-end
-
-function ENGINE_CLASS:Warn(message)
-    if self.Config.useWarnings then
-        print("[gEngine] [WARNING] " .. message)
-    end
-end
-
-function ENGINE_CLASS:Error(message)
-    error("[gEngine] [ERROR] " .. message)
-end
-
-function ENGINE_CLASS:OnQuit() end
-function ENGINE_CLASS:OnModuleEnabled(moduleName) end
-function ENGINE_CLASS:OnModuleDisabled(moduleName) end
-
 function ENGINE_CLASS:initialize()
     self.enabledModules = {}
     
@@ -113,9 +85,17 @@ function ENGINE_CLASS:Update(dt)
     if self:IsModuleEnabled("Timer") then
         self.Timer:Update(dt)
     end
+    
+    if self:IsModuleEnabled("Scene") then
+        self.SceneManager:Update(dt)
+    end
 end
 
-function ENGINE_CLASS:Draw() end
+function ENGINE_CLASS:Draw() 
+    if self:IsModuleEnabled("Scene") then
+        self.SceneManager:Draw()
+    end
+end
 
 function ENGINE_CLASS:Quit()
     local shouldQuit = self:OnQuit() or self.Event.Call("OnGameQuit", self)
@@ -149,5 +129,33 @@ function ENGINE_CLASS:MouseReleased(x, y, button, isTouch, presses)
         self.Input:MouseReleased(x, y, button, isTouch, presses)
     end
 end
+
+function ENGINE_CLASS:EnableModule(moduleName)
+    self.enabledModules[moduleName] = true
+    self:OnModuleEnabled(moduleName)
+end
+
+function ENGINE_CLASS:DisableModule(moduleName)
+    self.enabledModules[moduleName] = false
+    self:OnModuleDisabled(moduleName)
+end
+
+function ENGINE_CLASS:IsModuleEnabled(moduleName)
+    return self.enabledModules[moduleName] or false
+end
+
+function ENGINE_CLASS:Warn(message)
+    if self.Config.useWarnings then
+        print("[gEngine] [WARNING] " .. message)
+    end
+end
+
+function ENGINE_CLASS:Error(message)
+    error("[gEngine] [ERROR] " .. message)
+end
+
+function ENGINE_CLASS:OnQuit() end
+function ENGINE_CLASS:OnModuleEnabled(moduleName) end
+function ENGINE_CLASS:OnModuleDisabled(moduleName) end
 
 return ENGINE_CLASS()
