@@ -27,9 +27,7 @@ function ENGINE_CLASS:Warn(message)
 end
 
 function ENGINE_CLASS:Error(message)
-    if self.Config.useErrors then
-        error("[gEngine] [ERROR] " .. message)
-    end
+    error("[gEngine] [ERROR] " .. message)
 end
 
 function ENGINE_CLASS:OnQuit() end
@@ -80,6 +78,12 @@ function ENGINE_CLASS:initialize()
         self.Input = require.relative(this, "modules.input")
         self.Input:Init(self)
         self:EnableModule("Input")
+    end
+    
+    if self.Config.useScene then
+        self.SceneManager = require.relative(this, "modules.scene-manager")
+        self.Scene = require.relative(this, "modules.scene")
+        self:EnableModule("Scene")
     end
     
     if self:IsModuleEnabled("Event") then
