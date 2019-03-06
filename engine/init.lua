@@ -53,8 +53,8 @@ function ENGINE_CLASS:initialize()
     end
     
     if self.Config.useScene then
-        self.SceneManager = require.relative(this, "modules.scene-manager")
-        self.Scene = require.relative(this, "modules.scene")
+        self.SceneManager = require.relative(this, "modules.scene.scene-manager")
+        self.Scene = require.relative(this, "modules.scene.scene")
         self:EnableModule("Scene")
     end
     
