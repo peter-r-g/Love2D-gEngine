@@ -7,22 +7,20 @@ _G.Class = require.relative(this, "utility.middleClass")
 local ENGINE_CLASS = Class("gEngine")
 
 function ENGINE_CLASS:initialize()
-    self.enabledModules = {}
+    if _G._GetEngine then error("[gEngine] [FATAL] Tried to create an engine when one already exists!") end
+    _G._GetEngine = function() return self end
     
+    self.enabledModules = {}
+end
+
+function ENGINE_CLASS:Load()
     require.relative(this, "utility.table")
     
     self.Config = require.relative(this, "config")
     
-    if self.Config.useColor then
-        self.Color = require.relative(this, "modules.data-types.color")
-        self:EnableModule("Color")
-    end
+    self.Color = require.relative(this, "modules.data-types.color")
+    self.Vector2 = require.relative(this, "modules.data-types.vector2")
     
-    if self.Config.useVector2 then
-        self.Vector2 = require.relative(this, "modules.data-types.vector2")
-        self:EnableModule("Vector2")
-    end
-
     if self.Config.useSteam then
         self.Steam = require.relative("binaries.luasteam")
         self:EnableModule("Steam")
@@ -34,47 +32,18 @@ function ENGINE_CLASS:initialize()
         self:EnableModule("Multiplayer")
     end
     
-    if self.Config.useEvent then
-        self.Event = require.relative(this, "modules.event")
-        self.Event:Init(self)
-        self:EnableModule("Event")
-    end
+    self.Event = require.relative(this, "modules.event")
+    self.Timer = require.relative(this, "modules.timer")
+    self.Input = require.relative(this, "modules.input")
     
-    if self.Config.useTimer then
-        self.Timer = require.relative(this, "modules.timer")
-        self.Timer:Init(self)
-        self:EnableModule("Timer")
-    end
-    
-    if self.Config.useInput then
-        self.Input = require.relative(this, "modules.input")
-        self.Input:Init(self)
-        self:EnableModule("Input")
-    end
-    
-    if self.Config.useScene then
-        self.SceneManager = require.relative(this, "modules.scene.scene-manager")
-        self.Scene = require.relative(this, "modules.scene.scene")
-        self:EnableModule("Scene")
-    end
-    
-    if self:IsModuleEnabled("Event") then
-        self.Event.Call("OnEngineInitialized", self)
-    end
-end
-
-function ENGINE_CLASS:Load()
-    if self:IsModuleEnabled("Event") then
-        self.Event.Call("OnEngineStartedLoading", self)
-    end
+    self.SceneManager = require.relative(this, "modules.scene.scene-manager")
+    self.Scene = require.relative(this, "modules.scene.scene")
     
     if self:IsModuleEnabled("Steam") then
         self.Steam.init()
     end
     
-    if self:IsModuleEnabled("Event") then
-        self.Event.Call("OnEngineFinishedLoading", self)
-    end
+    self.Event.Call("Engine.FinishedLoading", self)
 end
 
 function ENGINE_CLASS:Update(dt)
@@ -82,23 +51,17 @@ function ENGINE_CLASS:Update(dt)
         self.Steam.runCallbacks()
     end
     
-    if self:IsModuleEnabled("Timer") then
-        self.Timer:Update(dt)
-    end
+    self.Timer:Update(dt)
     
-    if self:IsModuleEnabled("Scene") then
-        self.SceneManager:Update(dt)
-    end
+    self.SceneManager:Update(dt)
 end
 
 function ENGINE_CLASS:Draw() 
-    if self:IsModuleEnabled("Scene") then
-        self.SceneManager:Draw()
-    end
+    self.SceneManager:Draw()
 end
 
 function ENGINE_CLASS:Quit()
-    local shouldQuit = self:OnQuit() or self.Event.Call("OnGameQuit", self)
+    local shouldQuit = self:OnQuit() or self.Event.Call("Game.OnQuit", self)
     if shouldQuit then return true end
     
     if self:IsModuleEnabled("Steam") then
@@ -107,27 +70,19 @@ function ENGINE_CLASS:Quit()
 end
 
 function ENGINE_CLASS:KeyPressed(key, scanCode, isRepeat)
-    if self:IsModuleEnabled("Input") then
-        self.Input:KeyPressed(key, scanCode, isRepeat)
-    end
+    self.Input:KeyPressed(key, scanCode, isRepeat)
 end
 
 function ENGINE_CLASS:KeyReleased(key, scanCode)
-    if self:IsModuleEnabled("Input") then
-        self.Input:KeyReleased(key, scanCode, isRepeat)
-    end
+    self.Input:KeyReleased(key, scanCode, isRepeat)
 end
 
 function ENGINE_CLASS:MousePressed(x, y, button, isTouch, presses)
-    if self:IsModuleEnabled("Input") then
-        self.Input:MousePressed(x, y, button, isTouch, presses)
-    end
+    self.Input:MousePressed(x, y, button, isTouch, presses)
 end
 
 function ENGINE_CLASS:MouseReleased(x, y, button, isTouch, presses)
-    if self:IsModuleEnabled("Input") then
-        self.Input:MouseReleased(x, y, button, isTouch, presses)
-    end
+    self.Input:MouseReleased(x, y, button, isTouch, presses)
 end
 
 function ENGINE_CLASS:EnableModule(moduleName)
@@ -158,4 +113,4 @@ function ENGINE_CLASS:OnQuit() end
 function ENGINE_CLASS:OnModuleEnabled(moduleName) end
 function ENGINE_CLASS:OnModuleDisabled(moduleName) end
 
-return ENGINE_CLASS()
+_G.gEngine = ENGINE_CLASS()
