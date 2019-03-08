@@ -1,13 +1,7 @@
-local GAMESTATE = Class("Gamestate-Base")
-
-local engine = nil
-
-function GAMESTATE:Init(gEngine)
-    engine = gEngine
-end
+local GAMESTATE = Class("Scene-Base")
 
 function GAMESTATE:initialize(name, ...)
-    self.name = name or error("Gamestate-Base: Constructor was not given a name")
+    self.name = name or error("Scene-Base: Constructor was not given a name")
     self.entities = {}
     self.taggedEntities = {}
     self.drawLayers = {}
@@ -28,21 +22,19 @@ function GAMESTATE:_GetNewID()
 end
 
 function GAMESTATE:Enter()
-    if engine:IsModuleEnabled("Event") then
-        engine.Event.Subscribe("Object.OnTagAdded", "Gamestate.UpdateEntityTags", function(entity, tag)
-            if self.taggedEntities[tag] == nil then self.taggedEntities[tag] = {} end
-            self.taggedEntities[tag][entity:GetID()] = entity
-        end)
-        engine.Event.Subscribe("Object.OnTagRemoved", "Gamestate.UpdateEntityTags", function(entity, tag)
-            self.taggedEntities[tag][entity:GetID()] = nil
-        end)
-        engine.Event.Subscribe("Object.OnDrawLayerChanged", "Gamestate.UpdateDrawLayerTable", function(entity, oldLayer, newLayer)
-            self.drawLayers[oldLayer][entity:GetID()] = nil
+    gEngine.Event.Subscribe("Entity.OnTagAdded", "Scene.UpdateEntityTags", function(entity, tag)
+        if self.taggedEntities[tag] == nil then self.taggedEntities[tag] = {} end
+        self.taggedEntities[tag][entity:GetID()] = entity
+    end)
+    gEngine.Event.Subscribe("Entity.OnTagRemoved", "Scene.UpdateEntityTags", function(entity, tag)
+        self.taggedEntities[tag][entity:GetID()] = nil
+    end)
+    gEngine.Event.Subscribe("Entity.OnDrawLayerChanged", "Scene.UpdateDrawLayerTable", function(entity, oldLayer, newLayer)
+        self.drawLayers[oldLayer][entity:GetID()] = nil
             
-            if self.drawLayers[newLayer] == nil then self.drawLayers[newLayer] = {} end
-            self.drawLayers[newLayer][entity:GetID()] = entity
-        end)
-    end
+        if self.drawLayers[newLayer] == nil then self.drawLayers[newLayer] = {} end
+        self.drawLayers[newLayer][entity:GetID()] = entity
+    end)
 end
 
 function GAMESTATE:Exit()
@@ -50,9 +42,9 @@ function GAMESTATE:Exit()
     self.taggedEntities = {}
     self._internalIdTick = 0
 
-    engine.Event.Unsubscribe("Object.OnTagAdded", "Gamestate.UpdateEntityTags")
-    engine.Event.Unsubscribe("Object.OnTagRemoved", "Gamestate.UpdateEntityTags")
-    engine.Event.Unsubscribe("Object.OnDrawLayerChanged", "Gamestate.UpdateDrawLayerTable")
+    gEngine.Event.Unsubscribe("Entity.OnTagAdded", "Scene.UpdateEntityTags")
+    gEngine.Event.Unsubscribe("Entity.OnTagRemoved", "Scene.UpdateEntityTags")
+    gEngine.Event.Unsubscribe("Entity.OnDrawLayerChanged", "Scene.UpdateDrawLayerTable")
 end
 
 function GAMESTATE:Update(dt)
@@ -108,7 +100,7 @@ function GAMESTATE:AddEntity(entity)
     self.drawLayers[entity:GetDrawLayer()][entity:GetID()] = entity
     
     self:OnEntityAdded(entity:GetID(), entity)
-    engine.Event.Call("Gamestate.OnEntityAdded", self, entity)
+    gEngine.Event.Call("Scene.OnEntityAdded", self, entity)
 end
 
 function GAMESTATE:RemoveEntity(id)
@@ -126,7 +118,7 @@ function GAMESTATE:RemoveEntity(id)
         self.drawLayers[entity:GetDrawLayer()][entity:GetID()] = nil
         
         self:OnEntityRemoved(id, entity)
-        engine.Event.Call("Gamestate.OnEntityRemoved", self, id, entity)
+        gEngine.Event.Call("Scene.OnEntityRemoved", self, id, entity)
         
         self.entities[id] = nil
     end
@@ -136,14 +128,14 @@ function GAMESTATE:Pause()
     self.paused = true
     
     self:OnPaused()
-    engine.Event.Call("Gamestate.OnGamestatePaused", self)
+    gEngine.Event.Call("Scene.OnGamestatePaused", self)
 end
 
 function GAMESTATE:Unpause()
     self.paused = false
     
     self:OnUnpaused()
-    engine.Event.Call("Gamestate.OnGamestateUnpaused", self)
+    gEngine.Event.Call("Scene.OnGamestateUnpaused", self)
 end
 
 function GAMESTATE:IsPaused()

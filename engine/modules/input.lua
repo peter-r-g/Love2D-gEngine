@@ -1,5 +1,3 @@
-local engine = nil
-
 local INPUT = {}
 
 INPUT.key = {
@@ -168,10 +166,6 @@ INPUT.button = {
 
 local keys = {}
 local buttons = {}
-
-function INPUT:Init(gEngine)
-    engine = gEngine
-end
 
 function INPUT.IsKeyDown(key)
     return keys[key] == true or keys[key] == false or false
