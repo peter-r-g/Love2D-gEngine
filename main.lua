@@ -1,4 +1,4 @@
-_G.gEngine = require("engine.init")
+require("engine.init")
 
 function love.load()
     gEngine:Load()
