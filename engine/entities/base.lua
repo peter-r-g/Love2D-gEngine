@@ -5,6 +5,9 @@ function ENTITY:initialize(name, ...)
     
     self.tags = {}
     
+    self.parent = nil
+    self.children = {}
+    
     self.layer = 1
     
     self.paused = false
@@ -22,6 +25,32 @@ end
 
 function ENTITY:GetName()
     return self.name
+end
+
+function ENTITY:SetParent(parent)
+    local oldParent = self.parent
+    self.parent = parent
+    
+    self:OnParentChanged(oldParent, parent)
+    gEngine.Event.Call("Entity.OnParentChanged", self, oldParent, parent)
+end
+
+function ENTITY:GetParent()
+    return self.parent
+end
+
+function ENTITY:AddChild(child)
+    self.children[child:GetID()] = child
+    
+    self:OnChildAdded(child)
+    gEngine.Event.Call("Entity.OnChildAdded", self, child)
+end
+
+function ENTITY:RemoveChild(childId)
+    self.children[childId] = nil
+    
+    self:OnChildRemoved(childId)
+    gEngine.Event.Call("Entity.OnChildRemoved", self, childId)
 end
 
 function ENTITY:AddTag(tag)
@@ -120,6 +149,9 @@ function ENTITY:OnPaused() end
 function ENTITY:OnUnpaused() end
 function ENTITY:OnHidden() end
 function ENTITY:OnShown() end
+function ENTITY:OnParentChanged(parent) end
+function ENTITY:OnChildAdded(child) end
+function ENTITY:OnChildRemoved(childId) end
 
 function ENTITY:Update(dt) end
 function ENTITY:Draw() end
