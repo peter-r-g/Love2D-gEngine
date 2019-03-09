@@ -32,6 +32,9 @@ function ENGINE_CLASS:Load()
         self:EnableModule("Multiplayer")
     end
     
+    self.AssetLoader = require.relative(this, "modules.asset-loader.asset-loader")
+    require.relative(this, "modules.asset-loader.asset-loaders")
+    
     self.Event = require.relative(this, "modules.event")
     self.Timer = require.relative(this, "modules.timer")
     self.Input = require.relative(this, "modules.input")
