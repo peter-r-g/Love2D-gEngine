@@ -19,6 +19,8 @@ function ENGINE_CLASS:Load()
     
     self.Config = require.relative(this, "config")
     
+    self.Logger = require.relative(this, "src.core.logger")
+    
     self.Color = require.relative(this, "src.data-types.color")
     self.Vector2 = require.relative(this, "src.data-types.vector2")
     self.JSON = require.relative(this, "src.vendor.json")
@@ -70,6 +72,8 @@ end
 function ENGINE_CLASS:Quit()
     local shouldQuit = self:OnQuit() or self.Event.Call("Game.OnQuit", self)
     if shouldQuit then return true end
+    
+    gEngine.Logger.DumpToFile()
     
     if self:IsModuleEnabled("Steam") then
         self.Steam.shutdown()
