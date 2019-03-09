@@ -1,8 +1,8 @@
 local this = ...
 
-require(string.gsub(this, "init$", "") .. "vendor.require")
+require(string.gsub(this, "init$", "") .. "src.vendor.require")
 
-_G.Class = require.relative(this, "vendor.middleClass")
+_G.Class = require.relative(this, "src.vendor.middleClass")
 
 local ENGINE_CLASS = Class("gEngine")
 
@@ -15,12 +15,12 @@ function ENGINE_CLASS:initialize()
 end
 
 function ENGINE_CLASS:Load()
-    require.relative(this, "utility.table")
+    require.relative(this, "src.utility.table")
     
     self.Config = require.relative(this, "config")
     
-    self.Color = require.relative(this, "modules.data-types.color")
-    self.Vector2 = require.relative(this, "modules.data-types.vector2")
+    self.Color = require.relative(this, "src.data-types.color")
+    self.Vector2 = require.relative(this, "src.data-types.vector2")
     
     if self.Config.useSteam then
         self.Steam = require("luasteam")
@@ -28,22 +28,22 @@ function ENGINE_CLASS:Load()
     end
 
     if self.Config.useMultiplayer then
-        require.relative(this, "vendor.bitser")
-        self.Multiplayer = require.relative(this, "vendor.sock")
+        require.relative(this, "src.vendor.bitser")
+        self.Multiplayer = require.relative(this, "src.vendor.sock")
         self:EnableModule("Multiplayer")
     end
     
-    self.AssetLoader = require.relative(this, "modules.asset-loader.asset-loader")
-    require.relative(this, "modules.asset-loader.asset-loaders")
+    self.AssetLoader = require.relative(this, "src.core.asset-loader.asset-loader")
+    require.relative(this, "src.core.asset-loader.asset-loaders")
     
-    self.Event = require.relative(this, "modules.event")
-    self.Timer = require.relative(this, "modules.timer")
-    self.Input = require.relative(this, "modules.input")
+    self.Event = require.relative(this, "src.core.event")
+    self.Timer = require.relative(this, "src.core.timer")
+    self.Input = require.relative(this, "src.core.input")
     
-    self.SceneManager = require.relative(this, "modules.scene.scene-manager")
-    self.Scene = require.relative(this, "modules.scene.scene")
+    self.SceneManager = require.relative(this, "src.core.scene.scene-manager")
+    self.Scene = require.relative(this, "src.core.scene.scene")
     
-    self.Entity = require.relative(this, "entities.base")
+    self.Entity = require.relative(this, "src.entities.base")
     
     if self:IsModuleEnabled("Steam") then
         self.Steam.init()
