@@ -1,11 +1,11 @@
+local LOGGER = {}
+
 local oldPrint = print
 
 _G.print = function(...)
     oldPrint(...)
     LOGGER.Log(...)
 end
-
-local LOGGER = {}
 
 local log = {}
 
