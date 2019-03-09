@@ -123,11 +123,13 @@ end
 
 function ENGINE_CLASS:Warn(message)
     if self.Config.useWarnings then
+        self.Logger.Log("[gEngine] [WARNING] " .. message)
         print("[gEngine] [WARNING] " .. message)
     end
 end
 
 function ENGINE_CLASS:Error(message)
+    self.Logger.Log("[gEngine] [ERROR] " .. message)
     error("[gEngine] [ERROR] " .. message)
 end
 
