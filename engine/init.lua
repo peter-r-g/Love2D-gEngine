@@ -22,7 +22,7 @@ function ENGINE_CLASS:Load()
     self.Vector2 = require.relative(this, "modules.data-types.vector2")
     
     if self.Config.useSteam then
-        self.Steam = require.relative("binaries.luasteam")
+        self.Steam = require.relative(this, "binaries.luasteam")
         self:EnableModule("Steam")
     end
 

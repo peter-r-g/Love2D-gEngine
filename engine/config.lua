@@ -2,7 +2,7 @@ local CONFIG = {}
 
 CONFIG.useWarnings = false
 
-CONFIG.useMultiplayer = false
-CONFIG.useSteam = false
+CONFIG.useMultiplayer = true
+CONFIG.useSteam = true
 
 return CONFIG
