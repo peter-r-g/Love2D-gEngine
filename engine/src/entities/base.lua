@@ -2,6 +2,7 @@ local ENTITY = Class("Entity-Base")
 
 function ENTITY:initialize(name, ...)
     self.name = name or "Unknown"
+    self.id = gEngine:GetNewEntityID()
     
     self.tags = {}
     
