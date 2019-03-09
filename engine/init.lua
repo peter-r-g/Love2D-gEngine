@@ -22,13 +22,13 @@ function ENGINE_CLASS:Load()
     self.Vector2 = require.relative(this, "modules.data-types.vector2")
     
     if self.Config.useSteam then
-        self.Steam = require.relative(this, "binaries.luasteam")
+        self.Steam = require("luasteam")
         self:EnableModule("Steam")
     end
 
     if self.Config.useMultiplayer then
         require.relative(this, "vendor.bitser")
-        require.relative(this, "vendor.sock")
+        self.Multiplayer = require.relative(this, "vendor.sock")
         self:EnableModule("Multiplayer")
     end
     
