@@ -24,6 +24,10 @@ function ENTITY:GetSize()
     return self.size
 end
 
+function ENTITY:GetCenter()
+    return self.pos.x + (self.size.x / 2), self.pos.y + (self.size.y / 2)
+end
+
 function ENTITY:SetColor(color)
     self.color = color
     
