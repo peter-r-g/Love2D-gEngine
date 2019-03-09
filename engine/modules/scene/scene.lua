@@ -50,7 +50,7 @@ end
 function GAMESTATE:Update(dt)
     for id, entity in pairs(self.entities) do
         if not entity:IsPaused() then
-            entity:update(dt)
+            entity:Update(dt)
         end
     end
 end
@@ -58,7 +58,7 @@ end
 function GAMESTATE:Draw()
     for layerNum, entityTbl in ipairs(self.drawLayers) do
         for entityId, entity in pairs(entityTbl) do
-            if entity:IsVisible() then
+            if not entity:IsHidden() then
                 entity:Draw()
             end
         end

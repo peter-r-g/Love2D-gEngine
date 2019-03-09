@@ -1,7 +1,7 @@
 local MANAGER = {}
 
 local scenes = {}
-local activeState = nil
+local activeScene = nil
 
 local eventsEnabled = false
 
@@ -22,36 +22,36 @@ end
 function MANAGER.ChangeScene(sceneName)
     if scenes[sceneName] == nil then gEngine:Error("Module: \"Scene\", ChangeScene(): Tried to change to a scene that doesn't exist!") return end
     
-    if activeState then
+    if activeScene then
         gEngine.Event.Call("SceneManager.PreSceneExit", activeState)
-        activeState:Exit()
+        activeScene:Exit()
         gEngine.Event.Call("SceneManager.PostSceneExit", activeState)
     end
     
-    activeState = scenes[sceneName]
+    activeScene = scenes[sceneName]
     
     gEngine.Event.Call("SceneManger.PreSceneEnter", activeState)
-    activeState:Enter()
+    activeScene:Enter()
     gEngine.Event.Call("SceneManager.PostSceneEnter", activeState)
 end
 
-function MANAGER.GetActiveState()
-    return activeState
+function MANAGER.GetActiveScene()
+    return activeScene
 end
 
 function MANAGER:Update(dt)
-    if activeState then
-        if activeState:IsPaused() then
-            activeState:PausedUpdate(dt)
+    if activeScene then
+        if activeScene:IsPaused() then
+            activeScene:PausedUpdate(dt)
         else
-            activeState:Update(dt)
+            activeScene:Update(dt)
         end
     end
 end
 
 function MANAGER:Draw()
-    if activeState then
-        activeState:Draw()
+    if activeScene then
+        activeScene:Draw()
     end
 end
 
