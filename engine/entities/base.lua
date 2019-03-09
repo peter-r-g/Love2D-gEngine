@@ -17,6 +17,10 @@ function ENTITY:initialize(name, ...)
     gEngine.Event.Call("Entity.OnCreated", self)
 end
 
+function ENTITY:GetID()
+    return self.id
+end
+
 function ENTITY:SetName(name)
     self.name = name
     

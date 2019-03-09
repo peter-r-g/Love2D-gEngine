@@ -11,6 +11,7 @@ function ENGINE_CLASS:initialize()
     _G._GetEngine = function() return self end
     
     self.enabledModules = {}
+    self.entityIdTick = 0
 end
 
 function ENGINE_CLASS:Load()
@@ -102,6 +103,11 @@ end
 
 function ENGINE_CLASS:IsModuleEnabled(moduleName)
     return self.enabledModules[moduleName] or false
+end
+
+function ENGINE_CLASS:GetNewEntityID()
+    self.entityIdTick = self.entityIdTick + 1
+    return self.entityIdTick
 end
 
 function ENGINE_CLASS:Warn(message)

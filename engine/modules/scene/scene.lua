@@ -5,8 +5,7 @@ function GAMESTATE:initialize(name, ...)
     self.entities = {}
     self.taggedEntities = {}
     self.drawLayers = {}
-        
-    self._internalIdTick = 0
+
     self.paused = false
     
     self:OnGamestateCreated(...)
@@ -14,11 +13,6 @@ end
 
 function GAMESTATE:GetName()
     return self.name
-end
-
-function GAMESTATE:_GetNewID()
-    self._internalIdTick = self._internalIdTick + 1
-    return self._internalIdTick
 end
 
 function GAMESTATE:Enter()
@@ -86,9 +80,6 @@ function GAMESTATE:GetEntities()
 end
 
 function GAMESTATE:AddEntity(entity)
-    entity.id = self:_GetNewID()
-    entity.GetID = function(ent) return ent.id end
-    
     self.entities[entity:GetID()] = entity
     
     for _, tag in pairs(entity:GetTags()) do
