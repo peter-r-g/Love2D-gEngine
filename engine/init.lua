@@ -1,8 +1,8 @@
 local this = ...
 
-require(string.gsub(this, "init$", "") .. "utility.require")
+require(string.gsub(this, "init$", "") .. "vendor.require")
 
-_G.Class = require.relative(this, "utility.middleClass")
+_G.Class = require.relative(this, "vendor.middleClass")
 
 local ENGINE_CLASS = Class("gEngine")
 
@@ -27,8 +27,8 @@ function ENGINE_CLASS:Load()
     end
 
     if self.Config.useMultiplayer then
-        require.relative(this, "modules.multiplayer.bitser")
-        require.relative(this, "modules.multiplayer.sock")
+        require.relative(this, "vendor.bitser")
+        require.relative(this, "vendor.sock")
         self:EnableModule("Multiplayer")
     end
     
