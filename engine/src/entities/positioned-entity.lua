@@ -1,6 +1,10 @@
-local ENTITY = Class("Entity-Positioned", require.relative(..., "base"))
+local BASE = require.relative(..., "base")
+
+local ENTITY = Class("Entity-Positioned", BASE)
 
 function ENTITY:OnEntityCreated(pos)
+    BASE.OnEntityCreated(self)
+    
     self.pos = pos or gEngine.Vector2(0, 0)
 end
 
