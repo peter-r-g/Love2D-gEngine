@@ -39,6 +39,8 @@ function ENGINE_CLASS:Load()
     self.SceneManager = require.relative(this, "modules.scene.scene-manager")
     self.Scene = require.relative(this, "modules.scene.scene")
     
+    self.Entity = require.relative(this, "entities.base")
+    
     if self:IsModuleEnabled("Steam") then
         self.Steam.init()
     end
