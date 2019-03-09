@@ -55,4 +55,106 @@ function MANAGER:Draw()
     end
 end
 
+function MANAGER:MouseMoved(x, y, dx, dy, isTouch)
+    local activeScene = MANAGER:GetActiveScene()
+    
+    if activeScene then
+        local uiEntities = activeScene:GetEntitiesByTag("UI")
+        
+        if uiEntities and table.count(uiEntities) > 0 then
+            local currentTarget = nil
+            
+            for entityId, entity in pairs(uiEntities) do
+                if entity:IsVisible() and entity:IsMouseInArea(x, y) then
+                    if currentTarget == nil then
+                       currentTarget = entity
+                    else
+                        if entity:GetDrawLayer() > currentTarget:GetDrawLayer() then
+                            currentTarget = entity
+                        end
+                    end
+                else
+                    if entity:IsHovered() and not entity:IsClicked() then
+                        entity.isHovered = false
+                        entity:OffHovered()
+                    end
+                end
+            end
+            
+            if currentTarget and not currentTarget:IsHovered() and not currentTarget:IsClicked() then
+                currentTarget.isHovered = true
+                currentTarget:OnHovered(x, y, dx, dy, isTouch)
+            end
+        end
+    end
+end
+
+function MANAGER:MousePressed(x, y, button, isTouch, presses)
+    local activeScene = MANAGER:GetActiveScene()
+    
+    if activeScene then
+        local uiEntities = activeScene:GetEntitiesByTag("UI")
+        
+        if uiEntities and table.count(uiEntities) > 0 then
+            local currentTarget = nil
+            
+            for entityId, entity in pairs(uiEntities) do
+                if entity:IsVisible() and entity:IsMouseInArea(x, y) then
+                    if currentTarget == nil then
+                       currentTarget = entity
+                    else
+                        if entity:GetDrawLayer() > currentTarget:GetDrawLayer() then
+                            currentTarget = entity
+                        end
+                    end
+                end
+            end
+            
+            if currentTarget then
+                if currentTarget:IsHovered() then
+                    currentTarget.isHovered = false
+                    currentTarget:OffHovered()
+                end
+                currentTarget.isClicked = true
+                currentTarget:OnClicked(x, y, dx, dy, isTouch)
+            end
+        end
+    end
+end
+
+function MANAGER:MouseReleased(x, y, button, isTouch, presses)
+    local activeScene = MANAGER:GetActiveScene()
+    
+    if activeScene then
+        local uiEntities = activeScene:GetEntitiesByTag("UI")
+        
+        if uiEntities and table.count(uiEntities) > 0 then
+            local currentTarget = nil
+            
+            for entityId, entity in pairs(uiEntities) do
+                if entity:IsVisible() and entity:IsMouseInArea(x, y) then
+                    if currentTarget == nil then
+                       currentTarget = entity
+                    else
+                        if entity:GetDrawLayer() > currentTarget:GetDrawLayer() then
+                            currentTarget = entity
+                        end
+                    end
+                else
+                    if entity:IsClicked() then
+                        entity.isClicked = false
+                        entity:OffClicked()
+                    end
+                end
+            end
+            
+            if currentTarget and currentTarget:IsClicked() then
+                currentTarget.isClicked = false
+                currentTarget:OffClicked(x, y, dx, dy, isTouch)
+                currentTarget:DoClick(x, y, dx, dy, isTouch)
+            end
+        end
+    end
+end
+
 return MANAGER

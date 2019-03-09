@@ -24,6 +24,10 @@ function love.keyreleased(key, scanCode)
     gEngine:KeyReleased(key, scanCode)
 end
 
+function love.mousemoved(x, y, dx, dy, isTouch)
+    gEngine:MouseMoved(x, y, dx, dy, isTouch)
+end
+
 function love.mousepressed(x, y, button, isTouch, presses)
     gEngine:MousePressed(x, y, button, isTouch, presses)
 end

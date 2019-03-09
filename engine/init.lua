@@ -73,7 +73,7 @@ function ENGINE_CLASS:Quit()
     local shouldQuit = self:OnQuit() or self.Event.Call("Game.OnQuit", self)
     if shouldQuit then return true end
     
-    gEngine.Logger.DumpToFile()
+    self.Logger.DumpToFile()
     
     if self:IsModuleEnabled("Steam") then
         self.Steam.shutdown()
@@ -88,12 +88,18 @@ function ENGINE_CLASS:KeyReleased(key, scanCode)
     self.Input:KeyReleased(key, scanCode, isRepeat)
 end
 
+function ENGINE_CLASS:MouseMoved(x, y, dx, dy, isTouch)
+    self.SceneManager:MouseMoved(x, y, dx, dy, isTouch)
+end
+
 function ENGINE_CLASS:MousePressed(x, y, button, isTouch, presses)
     self.Input:MousePressed(x, y, button, isTouch, presses)
+    self.SceneManager:MousePressed(x, y, button, isTouch, presses)
 end
 
 function ENGINE_CLASS:MouseReleased(x, y, button, isTouch, presses)
     self.Input:MouseReleased(x, y, button, isTouch, presses)
+    self.SceneManager:MouseReleased(x, y, button, isTouch, presses)
 end
 
 function ENGINE_CLASS:EnableModule(moduleName)
