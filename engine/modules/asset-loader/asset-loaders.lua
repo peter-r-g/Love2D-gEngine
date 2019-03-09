@@ -1,1 +1,1 @@
-require.relative(..., "font")
+require.relative(..., "loaders.font")
