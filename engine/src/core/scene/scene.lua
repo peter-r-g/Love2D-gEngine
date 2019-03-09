@@ -82,7 +82,7 @@ end
 function GAMESTATE:AddEntity(entity)
     self.entities[entity:GetID()] = entity
     
-    for _, tag in pairs(entity:GetTags()) do
+    for tag, _ in pairs(entity:GetTags()) do
         if self.taggedEntities[tag] == nil then self.taggedEntities[tag] = {} end
         self.taggedEntities[tag][entity:GetID()] = entity
     end

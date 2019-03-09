@@ -65,7 +65,7 @@ function MANAGER:MouseMoved(x, y, dx, dy, isTouch)
             local currentTarget = nil
             
             for entityId, entity in pairs(uiEntities) do
-                if entity:IsVisible() and entity:IsMouseInArea(x, y) then
+                if not entity:IsHidden() and entity:IsMouseInArea(x, y) then
                     if currentTarget == nil then
                        currentTarget = entity
                     else
@@ -99,7 +99,7 @@ function MANAGER:MousePressed(x, y, button, isTouch, presses)
             local currentTarget = nil
             
             for entityId, entity in pairs(uiEntities) do
-                if entity:IsVisible() and entity:IsMouseInArea(x, y) then
+                if not entity:IsHidden() and entity:IsMouseInArea(x, y) then
                     if currentTarget == nil then
                        currentTarget = entity
                     else
@@ -132,7 +132,7 @@ function MANAGER:MouseReleased(x, y, button, isTouch, presses)
             local currentTarget = nil
             
             for entityId, entity in pairs(uiEntities) do
-                if entity:IsVisible() and entity:IsMouseInArea(x, y) then
+                if not entity:IsHidden() and entity:IsMouseInArea(x, y) then
                     if currentTarget == nil then
                        currentTarget = entity
                     else

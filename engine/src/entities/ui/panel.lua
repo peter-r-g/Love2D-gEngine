@@ -10,6 +10,10 @@ function ENTITY:OnEntityCreated(pos, size, color, drawMode)
     self.drawMode = drawMode or "fill"
 end
 
+function ENTITY:IsMouseInArea(x, y)
+    return self.pos.x < x and self.pos.y < y and self.pos.x + self.size.x > x and self.pos.y + self.size.y > y
+end
+
 function ENTITY:SetSize(size)
     self.size = size
     
