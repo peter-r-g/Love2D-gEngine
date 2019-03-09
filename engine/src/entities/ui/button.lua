@@ -16,7 +16,7 @@ function ENTITY:OnEntityCreated(pos, size, color, drawMode, text, font, textColo
 end
 
 function ENTITY:UpdateTextPosition()
-    local newTextPosx, newTextPosy = self:GetCenter()
+    local newTextPosx, newTextPosy = self:GetCenter():Get()
     newTextPosx = newTextPosx - (self.textObj:getWidth() / 2)
     newTextPosy = newTextPosy - (self.textObj:getHeight() / 2)
     newTextPosx, newTextPosy = newTextPosx - self.pos.x, newTextPosy - self.pos.y
