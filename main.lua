@@ -16,6 +16,10 @@ function love.quit()
     gEngine:Quit()
 end
 
+function love.errorhandler(msg)
+    gEngine:ErrorHandler(msg)
+end
+
 function love.keypressed(key, scanCode, isRepeat)
     gEngine:KeyPressed(key, scanCode, isRepeat)
 end

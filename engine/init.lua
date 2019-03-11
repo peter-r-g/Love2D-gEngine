@@ -80,6 +80,10 @@ function ENGINE_CLASS:Quit()
     end
 end
 
+function ENGINE_CLASS:ErrorHandler(message)
+    self.SceneManager.ChangeScene("Error")
+end
+
 function ENGINE_CLASS:KeyPressed(key, scanCode, isRepeat)
     self.Input:KeyPressed(key, scanCode, isRepeat)
 end
